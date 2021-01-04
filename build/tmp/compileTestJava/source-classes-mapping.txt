@@ -1,0 +1,2 @@
+heshan/compilertheory/parser/InputScannerTest.java
+ heshan.compilertheory.parser.InputScannerTest
