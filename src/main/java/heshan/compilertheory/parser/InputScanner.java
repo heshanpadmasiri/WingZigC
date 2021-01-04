@@ -8,9 +8,12 @@ import java.util.regex.Pattern;
 
 public class InputScanner implements Iterator<String>{
     Scanner scanner;
-    Pattern blockStart = Pattern.compile("\\{.*");
-    Pattern blockEnd = Pattern.compile(".+}.*");
-    Pattern blockEndPrefix = Pattern.compile(".+}");
+    Pattern oneLineBlock = Pattern.compile(".*\\{.*}.*");
+    Pattern blockStart = Pattern.compile(".*\\{.*");
+    Pattern blockStartPostFix = Pattern.compile("\\{.*");
+    Pattern blockEnd = Pattern.compile(".*}.*");
+    Pattern blockEnd1 = Pattern.compile("\\{.*}");
+    Pattern blockEnd2 = Pattern.compile(".*}");
     Pattern lineStart = Pattern.compile("#.*");
     Pattern emptyLine = Pattern.compile("\n?");
     Pattern multipleWhiteSpaces = Pattern.compile("\\s+");
@@ -26,7 +29,7 @@ public class InputScanner implements Iterator<String>{
     }
 
     private void skipComments(){
-        if(scanner.hasNext(blockStart)){
+        if(scanner.hasNext(blockStart) && !scanner.hasNext(oneLineBlock)){
             String token = scanner.next();
             while(token.charAt(token.length()-1) != '}'){
                 token = scanner.next();
@@ -50,14 +53,22 @@ public class InputScanner implements Iterator<String>{
         skipComments();
         String token = scanner.next();
         token = lineStart.matcher(token).replaceAll("");
-        if (blockStart.matcher(token).matches()){
-            token = blockStart.matcher(token).replaceAll("");
+        token = blockEnd1.matcher(token).replaceAll(""); // block comments starting and ending in the same line
+        if (blockStart.matcher(token).matches()){ // block comment starting in this line
+            token = blockStartPostFix.matcher(token).replaceAll("");
             while(!scanner.hasNext(blockEnd)){
                 scanner.next();
             }
         }
-        token = blockEndPrefix.matcher(token).replaceAll("");
+        token = blockEnd2.matcher(token).replaceAll(""); // block comment ending in this line
         token = multipleWhiteSpaces.matcher(token).replaceAll(" ");
+        if(token.length() == 0){
+            if (this.hasNext()){
+                return this.next();
+            } else {
+                return "<eof>";
+            }
+        }
         return token;
     }
 }

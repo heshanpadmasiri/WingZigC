@@ -5,12 +5,13 @@ import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TokenizerTest {
     Pattern whiteSpace = Pattern.compile("\\s+");
@@ -34,5 +35,22 @@ class TokenizerTest {
             }
 
         });
+    }
+
+    @org.junit.jupiter.api.Test
+    void canReadTestInput(){
+        Path filePath = Paths.get("", "src", "test", "resources", "inputScannerTest.test");
+        List<String> expectedTokens = Arrays.asList("Test", "test", "id", "=", "id", "+", "id", ">", "1");
+        try {
+            Tokenizer tokenizer = new Tokenizer(new InputScanner(filePath));
+            List<String> tokens = new LinkedList<>();
+            while(tokenizer.hasNext()){
+                String token = tokenizer.next();
+                tokens.add(token);
+            }
+            assertEquals(expectedTokens, tokens, "Invalid token generation for test input");
+        } catch (FileNotFoundException e) {
+            assertNull(e);
+        }
     }
 }
