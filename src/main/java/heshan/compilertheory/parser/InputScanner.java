@@ -14,9 +14,15 @@ public class InputScanner implements Iterator<String>{
     Pattern lineStart = Pattern.compile("#.*");
     Pattern emptyLine = Pattern.compile("\n?");
     Pattern multipleWhiteSpaces = Pattern.compile("\\s+");
+    Path inputFile;
 
     public InputScanner(Path input_file) throws FileNotFoundException {
+        this.inputFile = input_file;
         scanner = new Scanner(input_file.toFile()).useDelimiter("\n");
+    }
+
+    public String getFileName(){
+        return inputFile.getFileName().toString();
     }
 
     private void skipComments(){

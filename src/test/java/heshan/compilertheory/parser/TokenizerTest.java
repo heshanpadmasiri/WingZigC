@@ -9,10 +9,11 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-class InputScannerTest {
-    Pattern multipleWhiteSpaces = Pattern.compile("\\s{2,}");
+class TokenizerTest {
+    Pattern whiteSpace = Pattern.compile("\\s+");
 
     @org.junit.jupiter.api.Test
     void canReadAllInputs(){
@@ -22,14 +23,11 @@ class InputScannerTest {
         inputFiles.forEach(file -> {
             try {
                 InputScanner scanner = new InputScanner(file.toPath());
-                while(scanner.hasNext()){
-                    String token = scanner.next();
-                    assertFalse(multipleWhiteSpaces.matcher(token).matches(),
-                            String.format("multiple whitespaces detected in token \"%s\"", token)); // no empty strings
-                    assertFalse(token.contains("#"),
-                            String.format("line comment detected in token \"%s\"", token)); // no line comments
-                    assertFalse(token.contains("{") || token.contains("}"),
-                            String.format("block comment detected in token \"%s\"", token)); // no block comments
+                Tokenizer tokenizer = new Tokenizer(scanner);
+                while(tokenizer.hasNext()){
+                    String token = tokenizer.next();
+                    assertFalse(whiteSpace.matcher(token).matches(),
+                            String.format("Whitespaces detected in token \"%s\"", token)); // no empty strings
                 }
             } catch (FileNotFoundException e) {
                 assertNull(e);
