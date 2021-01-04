@@ -2,3 +2,17 @@ heshan/compilertheory/parser/InputScanner.java
  heshan.compilertheory.parser.InputScanner
 heshan/compilertheory/parser/Tokenizer.java
  heshan.compilertheory.parser.Tokenizer
+heshan/compilertheory/parser/TokenType.java
+ heshan.compilertheory.parser.TokenType
+heshan/compilertheory/parser/FailedToMatchPatternException.java
+ heshan.compilertheory.parser.FailedToMatchPatternException
+heshan/compilertheory/parser/AbstractLexicalAnalyzer.java
+ heshan.compilertheory.parser.AbstractLexicalAnalyzer
+heshan/compilertheory/parser/Token.java
+ heshan.compilertheory.parser.Token
+heshan/compilertheory/parser/SymbolAlreadyInException.java
+ heshan.compilertheory.parser.SymbolAlreadyInException
+heshan/compilertheory/parser/SymbolTable.java
+ heshan.compilertheory.parser.SymbolTable
+heshan/compilertheory/parser/KeyWordAnalyzer.java
+ heshan.compilertheory.parser.KeyWordAnalyzer

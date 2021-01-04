@@ -1,4 +1,6 @@
 heshan/compilertheory/parser/InputScannerTest.java
  heshan.compilertheory.parser.InputScannerTest
+heshan/compilertheory/parser/KeyWordAnalyzerTest.java
+ heshan.compilertheory.parser.KeyWordAnalyzerTest
 heshan/compilertheory/parser/TokenizerTest.java
  heshan.compilertheory.parser.TokenizerTest
