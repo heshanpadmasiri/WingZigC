@@ -28,6 +28,7 @@ public enum TokenType {
     READ,
     SUCC,
     PRED,
+    CASE_EXP,
 
     //keyword functions
     CHR,
@@ -54,7 +55,6 @@ public enum TokenType {
     IDENTIFIER,
 
     //punctuations
-    CASE_EXP,
     EOF,
     COL,
     SCOL,
