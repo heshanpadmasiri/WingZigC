@@ -7,7 +7,7 @@ import java.util.TreeMap;
 public class SymbolTable {
     Map<Integer, Integer> table = new TreeMap<>();
 
-    void insert(int key, int value) throws SymbolAlreadyInException {
+    void insert(int key, Integer value) throws SymbolAlreadyInException {
         if(table.containsKey(key)){
             throw new SymbolAlreadyInException();
         } else {
@@ -15,7 +15,7 @@ public class SymbolTable {
         }
     }
 
-    void upsert(int key, int value){
+    void upsert(int key, Integer value){
         if(table.containsKey(key)){
             table.replace(key, value);
         } else {

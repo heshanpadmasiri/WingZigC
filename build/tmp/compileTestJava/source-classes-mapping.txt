@@ -8,3 +8,5 @@ heshan/compilertheory/parser/KeyWordAnalyzerTest.java
  heshan.compilertheory.parser.KeyWordAnalyzerTest
 heshan/compilertheory/parser/OperationAnalyzerTest.java
  heshan.compilertheory.parser.OperationAnalyzerTest
+heshan/compilertheory/parser/IdentifierAnalyzerTest.java
+ heshan.compilertheory.parser.IdentifierAnalyzerTest
