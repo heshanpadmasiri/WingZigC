@@ -32,8 +32,15 @@ public class Tokenizer implements Iterator<String> {
         StringBuilder buffer = new StringBuilder();
         while(idx < currentLine.length()){
             char current = currentLine.charAt(idx);
-            if(current == ' ' || current == ')'){
+            if(current == ' '){
                 idx++;
+                break;
+            }
+            if(current == '(' || current == ')'){
+                if(buffer.length() == 0){
+                    buffer.append(current);
+                    idx++;
+                }
                 break;
             }
             if(!symbolMode){
@@ -48,6 +55,7 @@ public class Tokenizer implements Iterator<String> {
                 if(Character.isLetterOrDigit(current) || current == '_'){
                     symbolMode = false;
                     break;
+
                 } else {
                     buffer.append(current);
                     idx++;

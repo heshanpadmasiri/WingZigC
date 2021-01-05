@@ -53,6 +53,10 @@ public enum TokenType {
     DIV,
 
     IDENTIFIER,
+    // CONST
+    NUMBER,
+    CHAR,
+    STRING,
 
     //punctuations
     EOF,
