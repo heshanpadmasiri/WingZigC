@@ -27,7 +27,7 @@ class IdentifierAnalyzerTest {
                 {"h", true},
                 {"H", true},
                 {"_", true},
-                {"7", false},
+                {"7", true},
                 {"hH", true},
                 {"hh", true},
                 {"h_", true},
@@ -43,13 +43,17 @@ class IdentifierAnalyzerTest {
                 {"7H", false},
                 {"7h", false},
                 {"7_", false},
-                {"77", false},
+                {"77", true},
         }).collect(Collectors.toMap(data -> (String) data[0], data-> (Boolean) data[1]));
         idSuccess.forEach((token, success) -> {
             try {
                 Token t = identifierAnalyzer.matchPattern(token);
                 assertTrue(success);
-                assertEquals(t.getType(), TokenType.IDENTIFIER);
+                if(token.equals("7") || token.equals("77")){
+                    assertEquals(t.getType(), TokenType.NUMBER);
+                } else {
+                    assertEquals(t.getType(), TokenType.IDENTIFIER);
+                }
                 assertEquals(t.getValue(), token);
                 assertEquals(t.getId(), 0);
             } catch (FailedToMatchPatternException e) {
