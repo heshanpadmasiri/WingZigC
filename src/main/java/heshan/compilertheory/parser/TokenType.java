@@ -67,4 +67,6 @@ public enum TokenType {
     BRACK_OP,
     BRACK_CL,
 
+    FILE_END
+
 }

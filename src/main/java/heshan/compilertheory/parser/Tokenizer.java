@@ -74,7 +74,7 @@ public class Tokenizer implements Iterator<String> {
 
     @Override
     public boolean hasNext() {
-        if(idx < currentLine.length()){
+        if(idx >= 0 && idx < currentLine.length()){
             return true;
         }
         advanceLine();

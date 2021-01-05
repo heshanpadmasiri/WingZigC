@@ -6,8 +6,8 @@ heshan/compilertheory/parser/SymbolAlreadyInException.java
  heshan.compilertheory.parser.SymbolAlreadyInException
 heshan/compilertheory/parser/FailedToMatchPatternException.java
  heshan.compilertheory.parser.FailedToMatchPatternException
-heshan/compilertheory/parser/Token.java
- heshan.compilertheory.parser.Token
+heshan/compilertheory/parser/SymbolTable.java
+ heshan.compilertheory.parser.SymbolTable
 heshan/compilertheory/parser/TokenType.java
  heshan.compilertheory.parser.TokenType
 heshan/compilertheory/parser/OperationAnalyzer.java
@@ -16,9 +16,11 @@ heshan/compilertheory/parser/AbstractLexicalAnalyzer.java
  heshan.compilertheory.parser.AbstractLexicalAnalyzer
 heshan/compilertheory/parser/PunctuationAnalyzer.java
  heshan.compilertheory.parser.PunctuationAnalyzer
+heshan/compilertheory/parser/Token.java
+ heshan.compilertheory.parser.Token
 heshan/compilertheory/parser/IdentifierAnalyzer.java
  heshan.compilertheory.parser.IdentifierAnalyzer
 heshan/compilertheory/parser/KeyWordAnalyzer.java
  heshan.compilertheory.parser.KeyWordAnalyzer
-heshan/compilertheory/parser/SymbolTable.java
- heshan.compilertheory.parser.SymbolTable
+heshan/compilertheory/parser/LexicalAnalyzer.java
+ heshan.compilertheory.parser.LexicalAnalyzer
