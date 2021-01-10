@@ -556,65 +556,77 @@ public class RecursiveDescentParser {
   }
 
   private void Term() {
+    Factor();
+    if (isNextPrimary()){
+      moveForward();
+      _Term();
+    }
     switch (next.getType()) {
       case PLUS:
-        Term();
-        moveForward();
         checkTokenType(TokenType.PLUS);
         moveForward();
         Term();
         break;
       case MINUS:
-        Term();
-        moveForward();
         checkTokenType(TokenType.MINUS);
         moveForward();
         Term();
         break;
       case OR:
-        Term();
-        moveForward();
         checkTokenType(TokenType.OR);
         moveForward();
         Term();
         break;
-      default:
-        Factor();
+    }
+  }
+
+  private void _Term(){
+    Factor();
+    if (isNextPrimary()){
+      moveForward();
+      _Term();
     }
   }
 
   private void Factor() {
+    Primary();
+    if (isNextPrimary()){
+      moveForward();
+      _Factor();
+    }
     switch (next.getType()) {
       case MULTIPLY:
-        Factor();
         moveForward();
         checkTokenType(TokenType.MULTIPLY);
         moveForward();
         Primary();
         break;
       case DIV:
-        Factor();
         moveForward();
         checkTokenType(TokenType.DIV);
         moveForward();
         Primary();
         break;
       case AND:
-        Factor();
         moveForward();
         checkTokenType(TokenType.AND);
         moveForward();
         Primary();
         break;
       case MOD:
-        Factor();
         moveForward();
         checkTokenType(TokenType.MOD);
         moveForward();
         Primary();
         break;
-      default:
-        Primary();
+    }
+  }
+
+  private void _Factor(){
+    Primary();
+    if (isNextPrimary()){
+      moveForward();
+      _Factor();
     }
   }
 
