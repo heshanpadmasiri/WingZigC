@@ -132,9 +132,10 @@ public class RecursiveDescentParser {
 
   private void SubProgs() {
     checkTokenType(TokenType.FUNCTION);
-    while (current.getType() == TokenType.FUNCTION) {
-      Fcn();
+    Fcn();
+    while (next.getType() == TokenType.FUNCTION) {
       moveForward();
+      Fcn();
     }
   }
 
@@ -507,52 +508,22 @@ public class RecursiveDescentParser {
   }
 
   private void Expression() {
-    switch (next.getType()) {
-      case LEQ:
-        Term();
-        moveForward();
-        checkTokenType(TokenType.LEQ);
-        moveForward();
-        Term();
-        break;
-      case LT:
-        Term();
-        moveForward();
-        checkTokenType(TokenType.LT);
-        moveForward();
-        Term();
-        break;
-      case GEQ:
-        Term();
-        moveForward();
-        checkTokenType(TokenType.GEQ);
-        moveForward();
-        Term();
-        break;
-      case GT:
-        Term();
-        moveForward();
-        checkTokenType(TokenType.GT);
-        moveForward();
-        Term();
-        break;
-      case EQ:
-        Term();
-        moveForward();
-        checkTokenType(TokenType.EQ);
-        moveForward();
-        Term();
-        break;
-      case NEQ:
-        Term();
-        moveForward();
-        checkTokenType(TokenType.NEQ);
-        moveForward();
-        Term();
-        break;
-      default:
-        Term();
+    Term();
+    if (is_Expression(next)){
+      moveForward();
+      _Expression();
     }
+  }
+
+  private boolean is_Expression(Token token){
+    TokenType type = token.getType();
+    return type == TokenType.LEQ || type == TokenType.LT || type == TokenType.GEQ || type == TokenType.GT || type == TokenType.EQ || type == TokenType.NEQ;
+  }
+
+  private void _Expression(){
+    assert is_Expression(current);
+    moveForward();
+    Term();
   }
 
   private void Term() {
