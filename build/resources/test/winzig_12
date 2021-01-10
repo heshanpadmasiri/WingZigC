@@ -1,6 +1,7 @@
 program MergeSortTest:
 
 type
+
 	Array = ( a, temp );
 
 var

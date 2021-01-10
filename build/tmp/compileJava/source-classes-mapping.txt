@@ -24,3 +24,6 @@ heshan/compilertheory/parser/KeyWordAnalyzer.java
  heshan.compilertheory.parser.KeyWordAnalyzer
 heshan/compilertheory/parser/LexicalAnalyzer.java
  heshan.compilertheory.parser.LexicalAnalyzer
+heshan/compilertheory/parser/RecursiveDescentParser.java
+ heshan.compilertheory.parser.RecursiveDescentParser
+ heshan.compilertheory.parser.RecursiveDescentParser$1

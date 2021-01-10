@@ -6,9 +6,10 @@ public class RecursiveDescentParser {
   private Token current;
   private Token next;
 
-  public RecursiveDescentParser(SymbolTable symbolTable, LexicalAnalyzer lexicalAnalyzer) {
+  public RecursiveDescentParser(SymbolTable symbolTable, InputScanner inputScanner)
+      throws FailedToMatchPatternException {
     this.symbolTable = symbolTable;
-    this.lexicalAnalyzer = lexicalAnalyzer;
+    this.lexicalAnalyzer = new LexicalAnalyzer(symbolTable, inputScanner);
   }
 
   private void moveForward() {
@@ -20,23 +21,50 @@ public class RecursiveDescentParser {
     next = lexicalAnalyzer.peekNextToken();
   }
 
-  public void parse() {}
+  public void parse() {
+    moveForward();
+    Winzig();
+  }
 
   private void checkTokenType(TokenType type) {
     assert current.getType() == type;
   }
 
-  private void winzig() {
+  private void Winzig() {
     checkTokenType(TokenType.PROGRAM);
     moveForward();
     Name();
+    moveForward();
+    checkTokenType(TokenType.COL);
+    if (next.getType() == TokenType.CONST) {
+      moveForward();
+      Consts();
+    }
+    if (next.getType() == TokenType.TYPE) {
+      moveForward();
+      Types();
+    }
+    if (next.getType() == TokenType.VAR) {
+      moveForward();
+      Dclns();
+    }
+    if (next.getType() == TokenType.FUNCTION) {
+      moveForward();
+      SubProgs();
+    }
+    moveForward();
+    Body();
+    moveForward();
+    Name();
+    moveForward();
+    checkTokenType(TokenType.DOT);
   }
 
   private void Consts() {
     if (current.getType() == TokenType.CONST) {
       moveForward();
       Const();
-      while (next.getType() == TokenType.COMMA){
+      while (next.getType() == TokenType.COMMA) {
         moveForward();
         checkTokenType(TokenType.COMMA);
         moveForward();
@@ -68,17 +96,15 @@ public class RecursiveDescentParser {
   }
 
   private void Types() {
-    if (current.getType() == TokenType.TYPE) {
+    moveForward();
+    Type();
+    moveForward();
+    checkTokenType(TokenType.SCOL);
+    while (next.getType() == TokenType.IDENTIFIER) {
       moveForward();
       Type();
       moveForward();
       checkTokenType(TokenType.SCOL);
-      while (next.getType() == TokenType.IDENTIFIER) {
-        moveForward();
-        Type();
-        moveForward();
-        checkTokenType(TokenType.SCOL);
-      }
     }
   }
 
@@ -94,7 +120,7 @@ public class RecursiveDescentParser {
     checkTokenType(TokenType.BRACK_OP);
     moveForward();
     Name();
-    while (next.getType() == TokenType.COMMA){
+    while (next.getType() == TokenType.COMMA) {
       moveForward();
       checkTokenType(TokenType.COMMA);
       moveForward();
@@ -105,6 +131,7 @@ public class RecursiveDescentParser {
   }
 
   private void SubProgs() {
+    checkTokenType(TokenType.FUNCTION);
     while (current.getType() == TokenType.FUNCTION) {
       Fcn();
       moveForward();
@@ -127,12 +154,18 @@ public class RecursiveDescentParser {
     Name();
     moveForward();
     checkTokenType(TokenType.SCOL);
-    moveForward();
-    Consts();
-    moveForward();
-    Types();
-    moveForward();
-    Dclns();
+    if (next.getType() == TokenType.CONST) {
+      moveForward();
+      Consts();
+    }
+    if (next.getType() == TokenType.TYPE) {
+      moveForward();
+      Types();
+    }
+    if (next.getType() == TokenType.VAR) {
+      moveForward();
+      Dclns();
+    }
     moveForward();
     Body();
     moveForward();
@@ -142,31 +175,32 @@ public class RecursiveDescentParser {
   }
 
   private void Params() {
-    Dclns();
-    while (next.getType() == TokenType.SCOL){
+    Dcln();
+    while (next.getType() == TokenType.SCOL) {
       moveForward();
       checkTokenType(TokenType.SCOL);
       moveForward();
-      Dclns();
+      Dcln();
     }
   }
 
   private void Dclns() {
-    if (current.getType() == TokenType.VAR) {
+    checkTokenType(TokenType.VAR);
+    moveForward();
+    Dcln();
+    moveForward();
+    checkTokenType(TokenType.SCOL);
+    while (next.getType() == TokenType.IDENTIFIER) {
       moveForward();
-      Dclns();
+      Dcln();
       moveForward();
       checkTokenType(TokenType.SCOL);
-      if (next.getType() == TokenType.VAR) {
-        moveForward();
-        Dclns();
-      }
     }
   }
 
   private void Dcln() {
     Name();
-    while (next.getType() == TokenType.COMMA){
+    while (next.getType() == TokenType.COMMA) {
       moveForward();
       checkTokenType(TokenType.COMMA);
       moveForward();
@@ -180,16 +214,36 @@ public class RecursiveDescentParser {
 
   private void Body() {
     checkTokenType(TokenType.BEGIN);
-    moveForward();
-    Statement();
-    while (next.getType() == TokenType.SCOL){
-      moveForward();
-      checkTokenType(TokenType.SCOL);
+    if(isNextStatement()){
       moveForward();
       Statement();
     }
+    while (next.getType() == TokenType.SCOL) {
+      moveForward();
+      checkTokenType(TokenType.SCOL);
+      if (isNextStatement()){
+        moveForward();
+        Statement();
+      }
+    }
     moveForward();
     checkTokenType(TokenType.END);
+  }
+
+  private boolean isNextStatement() {
+    TokenType nextType = next.getType();
+    return nextType == TokenType.IDENTIFIER
+        || nextType == TokenType.OUTPUT
+        || nextType == TokenType.IF
+        || nextType == TokenType.WHILE
+        || nextType == TokenType.REPEAT
+        || nextType == TokenType.FOR
+        || nextType == TokenType.LOOP
+        || nextType == TokenType.CASE
+        || nextType == TokenType.READ
+        || nextType == TokenType.EXIT
+        || nextType == TokenType.RETURN
+        || nextType == TokenType.BEGIN;
   }
 
   private void Statement() {
@@ -202,7 +256,7 @@ public class RecursiveDescentParser {
         checkTokenType(TokenType.BRACK_OP);
         moveForward();
         OutExp();
-        while (next.getType() == TokenType.COMMA){
+        while (next.getType() == TokenType.COMMA) {
           moveForward();
           checkTokenType(TokenType.COMMA);
           moveForward();
@@ -216,13 +270,17 @@ public class RecursiveDescentParser {
         Expression();
         moveForward();
         checkTokenType(TokenType.THEN);
-        moveForward();
-        Statement();
+        if (isNextStatement()) {
+          moveForward();
+          Statement();
+        }
         if (next.getType() == TokenType.ELSE) {
           moveForward();
           checkTokenType(TokenType.ELSE);
-          moveForward();
-          Statement();
+          if (isNextStatement()) {
+            moveForward();
+            Statement();
+          }
         }
         break;
       case WHILE:
@@ -230,17 +288,23 @@ public class RecursiveDescentParser {
         Expression();
         moveForward();
         checkTokenType(TokenType.DO);
-        moveForward();
-        Statement();
-        break;
-      case REPEAT:
-        moveForward();
-        Statement();
-        while (next.getType() == TokenType.SCOL){
-          moveForward();
-          checkTokenType(TokenType.SCOL);
+        if (isNextStatement()) {
           moveForward();
           Statement();
+        }
+        break;
+      case REPEAT:
+        if (isNextStatement()) {
+          moveForward();
+          Statement();
+        }
+        while (next.getType() == TokenType.SCOL) {
+          moveForward();
+          checkTokenType(TokenType.SCOL);
+          if (isNextStatement()) {
+            moveForward();
+            Statement();
+          }
         }
         moveForward();
         checkTokenType(TokenType.UNTIL);
@@ -250,28 +314,41 @@ public class RecursiveDescentParser {
       case FOR:
         moveForward();
         checkTokenType(TokenType.BRACK_OP);
-        moveForward();
-        ForStat();
+        if (next.getType() == TokenType.IDENTIFIER) {
+          moveForward();
+          ForStat();
+        }
         moveForward();
         checkTokenType(TokenType.SCOL);
+        if (isNextPrimary()) {
+          moveForward();
+          ForExp();
+        }
         moveForward();
-        ForExp();
         checkTokenType(TokenType.SCOL);
-        moveForward();
-        ForStat();
+        if (next.getType() == TokenType.IDENTIFIER) {
+          moveForward();
+          ForStat();
+        }
         moveForward();
         checkTokenType(TokenType.BRACK_CL);
-        moveForward();
-        Statement();
-        break;
-      case LOOP:
-        moveForward();
-        Statement();
-        while (next.getType() == TokenType.SCOL){
-          moveForward();
-          checkTokenType(TokenType.SCOL);
+        if (isNextStatement()) {
           moveForward();
           Statement();
+        }
+        break;
+      case LOOP:
+        if (isNextStatement()) {
+          moveForward();
+          Statement();
+        }
+        while (next.getType() == TokenType.SCOL) {
+          moveForward();
+          checkTokenType(TokenType.SCOL);
+          if (isNextStatement()) {
+            moveForward();
+            Statement();
+          }
         }
         moveForward();
         checkTokenType(TokenType.POOL);
@@ -284,8 +361,10 @@ public class RecursiveDescentParser {
         checkTokenType(TokenType.OF);
         moveForward();
         Caseclauses();
-        moveForward();
-        OtherwiseClause();
+        if (next.getType() == TokenType.OTHERWISE){
+          moveForward();
+          OtherwiseClause();
+        }
         moveForward();
         checkTokenType(TokenType.END);
         break;
@@ -294,7 +373,7 @@ public class RecursiveDescentParser {
         checkTokenType(TokenType.BRACK_OP);
         moveForward();
         Name();
-        while (next.getType() == TokenType.COMMA){
+        while (next.getType() == TokenType.COMMA) {
           moveForward();
           checkTokenType(TokenType.COMMA);
           moveForward();
@@ -312,6 +391,8 @@ public class RecursiveDescentParser {
       case BEGIN:
         Body();
         break;
+      default:
+        throw new IllegalStateException("Unexpected value: " + current.getType());
     }
   }
 
@@ -328,18 +409,22 @@ public class RecursiveDescentParser {
   }
 
   private void Caseclauses() {
-    do {
+    Caseclause();
+    moveForward();
+    checkTokenType(TokenType.SCOL);
+    while (next.getType() == TokenType.NUMBER
+        || next.getType() == TokenType.CHAR
+        || next.getType() == TokenType.IDENTIFIER) {
+      moveForward();
       Caseclause();
       moveForward();
       checkTokenType(TokenType.SCOL);
-    } while (next.getType() == TokenType.NUMBER
-        || next.getType() == TokenType.CHAR
-        || next.getType() == TokenType.IDENTIFIER);
+    }
   }
 
   private void Caseclause() {
     CaseExpression();
-    while (next.getType() == TokenType.COMMA){
+    while (next.getType() == TokenType.COMMA) {
       moveForward();
       checkTokenType(TokenType.COMMA);
       moveForward();
@@ -347,8 +432,10 @@ public class RecursiveDescentParser {
     }
     moveForward();
     checkTokenType(TokenType.COL);
-    moveForward();
-    Statement();
+    if(isNextStatement()){
+      moveForward();
+      Statement();
+    }
   }
 
   private void CaseExpression() {
@@ -364,7 +451,8 @@ public class RecursiveDescentParser {
   }
 
   private void OtherwiseClause() {
-    if (current.getType() == TokenType.OTHERWISE) {
+    checkTokenType(TokenType.OTHERWISE);
+    if (isNextStatement()){
       moveForward();
       Statement();
     }
@@ -387,30 +475,35 @@ public class RecursiveDescentParser {
   }
 
   private void ForStat() {
-    if (current.getType() == TokenType.IDENTIFIER) {
-      Assignment();
-    }
+    checkTokenType(TokenType.IDENTIFIER);
+    Assignment();
+  }
+
+  private boolean isNextPrimary() {
+    return isPrimary(next);
+  }
+
+  private boolean isPrimary(Token token) {
+    return token.getType() == TokenType.MINUS
+        || token.getType() == TokenType.PLUS
+        || token.getType() == TokenType.NOT
+        || token.getType() == TokenType.EOF
+        || token.getType() == TokenType.IDENTIFIER
+        || token.getType() == TokenType.NUMBER
+        || token.getType() == TokenType.CHAR
+        || token.getType() == TokenType.BRACK_OP
+        || token.getType() == TokenType.SUCC
+        || token.getType() == TokenType.PRED
+        || token.getType() == TokenType.CHR
+        || token.getType() == TokenType.ORD;
   }
 
   private boolean isPrimary() {
-    return current.getType() == TokenType.MINUS
-        || current.getType() == TokenType.PLUS
-        || current.getType() == TokenType.NOT
-        || current.getType() == TokenType.EOF
-        || current.getType() == TokenType.IDENTIFIER
-        || current.getType() == TokenType.NUMBER
-        || current.getType() == TokenType.CHAR
-        || current.getType() == TokenType.BRACK_OP
-        || current.getType() == TokenType.SUCC
-        || current.getType() == TokenType.PRED
-        || current.getType() == TokenType.CHR
-        || current.getType() == TokenType.ORD;
+    return isPrimary(current);
   }
 
   private void ForExp() {
-    if (isPrimary()) {
-      Expression();
-    }
+    Expression();
   }
 
   private void Expression() {
@@ -544,7 +637,7 @@ public class RecursiveDescentParser {
           checkTokenType(TokenType.BRACK_OP);
           moveForward();
           Expression();
-          while (next.getType() == TokenType.COMMA){
+          while (next.getType() == TokenType.COMMA) {
             moveForward();
             checkTokenType(TokenType.COMMA);
             moveForward();
