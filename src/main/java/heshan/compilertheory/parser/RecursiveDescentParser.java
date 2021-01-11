@@ -90,8 +90,6 @@ public class RecursiveDescentParser {
         break;
       default:
         Name();
-        moveForward();
-        checkTokenType(TokenType.SCOL);
     }
   }
 
