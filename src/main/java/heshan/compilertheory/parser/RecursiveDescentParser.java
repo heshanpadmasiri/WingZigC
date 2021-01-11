@@ -532,16 +532,19 @@ public class RecursiveDescentParser {
     }
     switch (next.getType()) {
       case PLUS:
+        moveForward();
         checkTokenType(TokenType.PLUS);
         moveForward();
         Term();
         break;
       case MINUS:
+        moveForward();
         checkTokenType(TokenType.MINUS);
         moveForward();
         Term();
         break;
       case OR:
+        moveForward();
         checkTokenType(TokenType.OR);
         moveForward();
         Term();

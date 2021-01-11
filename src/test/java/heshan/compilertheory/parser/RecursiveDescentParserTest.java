@@ -37,7 +37,6 @@ class RecursiveDescentParserTest {
     inputFiles.forEach(file -> {
       InputScanner scanner = null;
       try {
-        System.out.println(file);
         scanner = new InputScanner(file.toPath());
         RecursiveDescentParser parser = new RecursiveDescentParser(symbolTable, scanner);
         parser.parse();
