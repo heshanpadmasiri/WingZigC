@@ -65,7 +65,7 @@ class AbstractSyntaxTreeTest {
 
   @Test
   void printSpecific(){
-    Path path = Paths.get("", "src", "test", "resources","winzig_03");
+    Path path = Paths.get("", "src", "test", "resources","winzig_12");
     printTree(path);
   }
 

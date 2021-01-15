@@ -23,7 +23,19 @@ public class ASTNode {
   }
 
   public void addChildToHead(ASTNode node){
-    children.add(0, node);
+    if (this.children.size() == maxChildren()){
+      children.get(0).addChildToHead(node);
+    } else {
+      children.add(0, node);
+    }
+  }
+
+  // TODO: 1/15/21 fill this function correctly for all nodes
+  private int maxChildren() {
+    if (value.equals("+") || value.equals("-")){
+      return 2;
+    }
+    return 1000;
   }
 
   public List<ASTNode> getChildren() {
