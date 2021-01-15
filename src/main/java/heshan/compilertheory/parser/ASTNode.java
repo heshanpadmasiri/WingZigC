@@ -22,8 +22,16 @@ public class ASTNode {
     children.add(node);
   }
 
+  public void addChildToHead(ASTNode node){
+    children.add(0, node);
+  }
+
   public List<ASTNode> getChildren() {
     return children;
+  }
+
+  public void dropChild(ASTNode node){
+    children.remove(node);
   }
 
   @Override

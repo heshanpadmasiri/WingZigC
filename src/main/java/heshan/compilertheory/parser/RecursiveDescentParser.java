@@ -22,6 +22,10 @@ public class RecursiveDescentParser {
     next = lexicalAnalyzer.peekNextToken();
   }
 
+  public AbstractSyntaxTree getAbstractSyntaxTree() {
+    return abstractSyntaxTree;
+  }
+
   public void parse() {
     moveForward();
     Winzig();
@@ -589,9 +593,10 @@ public class RecursiveDescentParser {
     Term(bufferNode);
     if (is_Expression(next)) {
       ASTNode newBufferNode = new ASTNode("buffer");
-      bufferNode.getChildren().forEach(newBufferNode::addChild);
       moveForward();
-      bufferNode = _Expression(newBufferNode);
+      _Expression(newBufferNode);
+      bufferNode.getChildren().forEach(newBufferNode.getChildren().get(0)::addChildToHead);
+      bufferNode = newBufferNode;
     }
     bufferNode.getChildren().forEach(parent::addChild);
   }
@@ -606,7 +611,7 @@ public class RecursiveDescentParser {
         || type == TokenType.NEQ;
   }
 
-  private ASTNode _Expression(ASTNode bufferNode) {
+  private void _Expression(ASTNode bufferNode) {
     assert is_Expression(current);
     ASTNode node;
     String node_body;
@@ -635,7 +640,6 @@ public class RecursiveDescentParser {
     node = new ASTNode(node_body, bufferNode);
     moveForward();
     Term(node);
-    return node;
   }
 
   private void Term(ASTNode parent) {
@@ -643,9 +647,10 @@ public class RecursiveDescentParser {
     Factor(bufferNode);
     if (isNextPrimary()) {
       ASTNode newBufferNode = new ASTNode("buffer");
-      bufferNode.getChildren().forEach(newBufferNode::addChild);
       moveForward();
-      bufferNode = _Term(newBufferNode);
+      _Term(newBufferNode);
+      bufferNode.getChildren().forEach(newBufferNode.getChildren().get(0)::addChildToHead);
+      bufferNode = newBufferNode;
     }
     ASTNode node;
     switch (next.getType()) {
@@ -673,19 +678,22 @@ public class RecursiveDescentParser {
         moveForward();
         Term(node);
         break;
+      default:
+        bufferNode.getChildren().forEach(parent::addChild);
     }
   }
 
-  private ASTNode _Term(ASTNode parent) {
+  private void _Term(ASTNode parent) {
     ASTNode bufferNode = new ASTNode("buffer");
     Factor(bufferNode);
     if (isNextPrimary()) {
       ASTNode newBufferNode = new ASTNode("buffer");
-      bufferNode.getChildren().forEach(newBufferNode::addChild);
       moveForward();
-      bufferNode = _Term(newBufferNode);
+      _Term(newBufferNode);
+      bufferNode.getChildren().forEach(newBufferNode.getChildren().get(0)::addChildToHead);
+      bufferNode = newBufferNode;
     }
-    return bufferNode;
+    bufferNode.getChildren().forEach(parent::addChild);
   }
 
   private void Factor(ASTNode parent) {
@@ -694,8 +702,9 @@ public class RecursiveDescentParser {
     if (isNextPrimary()) {
       moveForward();
       ASTNode newBufferNode = new ASTNode("buffer");
-      bufferNode.getChildren().forEach(newBufferNode::addChild);
-      bufferNode = _Factor(newBufferNode);
+      _Factor(newBufferNode);
+      bufferNode.getChildren().forEach(newBufferNode.getChildren().get(0)::addChildToHead);
+      bufferNode = newBufferNode;
     }
     ASTNode node;
     switch (next.getType()) {
@@ -731,19 +740,24 @@ public class RecursiveDescentParser {
         moveForward();
         Primary(node);
         break;
+      default:
+        bufferNode.getChildren().forEach(parent::addChild);
     }
   }
 
-  private ASTNode _Factor(ASTNode parent) {
-    ASTNode bufferNode = parent;
+  private void _Factor(ASTNode parent) {
+    ASTNode bufferNode = new ASTNode("buffer", parent);
     Primary(bufferNode);
     if (isNextPrimary()) {
-      ASTNode newBufferNode = new ASTNode("buffer");
-      bufferNode.getChildren().forEach(newBufferNode::addChild);
+      ASTNode newBufferNode = new ASTNode("buffer", parent);
       moveForward();
-      bufferNode = _Factor(newBufferNode);
+      _Factor(newBufferNode);
+      bufferNode.getChildren().forEach(newBufferNode.getChildren().get(0)::addChildToHead);
+      parent.dropChild(bufferNode);
+      bufferNode = newBufferNode;
     }
-    return bufferNode;
+    bufferNode.getChildren().forEach(parent::addChild);
+    parent.dropChild(bufferNode);
   }
 
   private void Primary(ASTNode parent) {
@@ -755,8 +769,9 @@ public class RecursiveDescentParser {
         Primary(node);
         break;
       case PLUS:
+        node = new ASTNode("+", parent);
         moveForward();
-        Primary(parent);
+        Primary(node);
         break;
       case NOT:
         node = new ASTNode("not", parent);
@@ -768,9 +783,11 @@ public class RecursiveDescentParser {
         break;
       case NUMBER:
         node = new ASTNode("<integer>", parent);
+        node.addChild(new ASTNode(current.getValue()));
         break;
       case CHAR:
         node = new ASTNode("<char>", parent);
+        node.addChild(new ASTNode(current.getValue()));
         break;
       case IDENTIFIER:
         if (next.getType() == TokenType.BRACK_OP) {
@@ -839,5 +856,7 @@ public class RecursiveDescentParser {
 
   private void Name(ASTNode parent) {
     checkTokenType(TokenType.IDENTIFIER);
+    ASTNode node = new ASTNode("<identifier>",parent);
+    node.addChild(new ASTNode(current.getValue()));
   }
 }
