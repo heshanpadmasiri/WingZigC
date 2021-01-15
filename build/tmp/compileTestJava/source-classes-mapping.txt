@@ -14,3 +14,5 @@ heshan/compilertheory/parser/OperationAnalyzerTest.java
  heshan.compilertheory.parser.OperationAnalyzerTest
 heshan/compilertheory/parser/RecursiveDescentParserTest.java
  heshan.compilertheory.parser.RecursiveDescentParserTest
+heshan/compilertheory/parser/AbstractSyntaxTreeTest.java
+ heshan.compilertheory.parser.AbstractSyntaxTreeTest
