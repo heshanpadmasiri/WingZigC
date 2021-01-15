@@ -9,13 +9,15 @@ public class ASTNode {
 
   public ASTNode(String value) {
     this.value = value;
-  }
-
-  public ASTNode() {
     children = new LinkedList<>();
   }
 
-  //todo: add an special case for identifiers
+  public ASTNode(String value, ASTNode parent){
+    this.value = value;
+    children = new LinkedList<>();
+    parent.addChild(this);
+  }
+
   public void addChild(ASTNode node) {
     children.add(node);
   }
