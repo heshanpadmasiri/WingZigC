@@ -64,6 +64,12 @@ class AbstractSyntaxTreeTest {
   }
 
   @Test
+  void printSpecific(){
+    Path path = Paths.get("", "src", "test", "resources","winzig_03");
+    printTree(path);
+  }
+
+  @Test
   void printTree() {
     Path assetsRoot = Paths.get("", "src", "test", "resources");
     Stream<File> inputFiles =

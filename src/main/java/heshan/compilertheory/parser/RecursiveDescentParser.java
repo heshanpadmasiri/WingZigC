@@ -254,6 +254,8 @@ public class RecursiveDescentParser {
     if (isNextStatement()) {
       moveForward();
       Statement(node);
+    } else {
+      node.addChild(new ASTNode("<null>"));
     }
     while (next.getType() == TokenType.SCOL) {
       moveForward();
@@ -261,6 +263,8 @@ public class RecursiveDescentParser {
       if (isNextStatement()) {
         moveForward();
         Statement(node);
+      } else {
+        node.addChild(new ASTNode("<null>"));
       }
     }
     moveForward();
@@ -534,6 +538,8 @@ public class RecursiveDescentParser {
     if (isNextStatement()) {
       moveForward();
       Statement(node);
+    } else {
+      node.addChild(new ASTNode("<null>"));
     }
   }
 
