@@ -25,6 +25,7 @@ class AbstractSyntaxTreeTest {
         symbolTable = mock(SymbolTable.class);
     }
 
+
     void printTree(Path program_path) {
         try {
             InputScanner scanner = new InputScanner(program_path);

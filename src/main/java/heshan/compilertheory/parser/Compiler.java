@@ -1,6 +1,7 @@
 package heshan.compilertheory.parser;
 
 import java.nio.file.Path;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,8 @@ public class Compiler {
     public Compiler(AbstractSyntaxTree ast) {
         this.ast = ast;
         symbolTable = new SymbolTable();
-        compile(ast.getRoot(), new AttributeNode(0,0));
+        program = new LinkedList<>();
+        compile(ast.getRoot(), new AttributeNode(0, 0));
     }
 
     private void compile(ASTNode astNode, AttributeNode attributeNode) {
@@ -200,11 +202,15 @@ public class Compiler {
                 AttributeNode bodyNode = new AttributeNode(dclnsNode);
                 compile(children.get(3), bodyNode);
                 code = "stop";
-                n = bodyNode.getNext()+1;
+                n = bodyNode.getNext() + 1;
                 top = bodyNode.top;
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + astNode.getValue());
+                if (astNode.getChildren().size() == 0) {
+                    System.out.println("Silently ignoring node " + astNode.toString());
+                } else {
+                    throw new IllegalStateException("Unexpected value: " + astNode.getValue());
+                }
         }
         if (code != null) {
             program.add(code);
