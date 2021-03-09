@@ -162,7 +162,7 @@ public class Compiler {
                 n = rightChild.getNext() + 1;
                 top = rightChild.top - 1;
                 break;
-            case ":=":
+            case "assign":
                 String var_name = astNode.getChildren().get(0).getChildren().get(0).getValue();
                 AttributeNode exp_node = new AttributeNode(attributeNode);
                 compile(astNode.getChildren().get(1), exp_node);
@@ -181,6 +181,7 @@ public class Compiler {
                     DataType dataType = type.equals("integer") ? DataType.INT : DataType.CHAR;
                     symbolTable.addSymbol(_variableName, dataType, top + 1);
                     top++;
+                    program.add("lit -1");
                 }
                 break;
             case "block":
@@ -198,9 +199,9 @@ public class Compiler {
                 AttributeNode constNode = new AttributeNode(attributeNode);
                 compile(children.get(1), constNode);
                 AttributeNode dclnsNode = new AttributeNode(constNode);
-                compile(children.get(2), dclnsNode);
+                compile(children.get(3), dclnsNode);
                 AttributeNode bodyNode = new AttributeNode(dclnsNode);
-                compile(children.get(3), bodyNode);
+                compile(children.get(5), bodyNode);
                 code = "stop";
                 n = bodyNode.getNext() + 1;
                 top = bodyNode.top;
