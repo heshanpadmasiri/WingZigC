@@ -3,15 +3,33 @@ package heshan.compilertheory.parser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CompilerTest {
     Compiler compiler;
+    private List<String> readFile(File file){
+        Scanner s = null;
+        List<String> body = new LinkedList<>();
+        try {
+            s = new Scanner(file);
+            while (s.hasNextLine()){
+                body.add(s.nextLine());
+            }
+            s.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return body;
+    }
 
     @BeforeEach
     void setUp() {
@@ -30,9 +48,8 @@ class CompilerTest {
     @Test
     void getProgram() {
         List<String> program = compiler.getProgram();
-        for (String line : program) {
-            System.out.println(line);
-        }
+        List<String> expectedOutput = readFile(Paths.get("", "src", "test", "resources", "compile_test_expected.o").toFile());
+        assertEquals(expectedOutput, program);
     }
 
     @Test
