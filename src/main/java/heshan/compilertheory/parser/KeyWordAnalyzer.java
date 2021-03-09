@@ -1,9 +1,6 @@
 package heshan.compilertheory.parser;
 
 public class KeyWordAnalyzer extends AbstractLexicalAnalyzer{
-    public KeyWordAnalyzer(SymbolTable symbolTable) {
-        super(symbolTable);
-    }
 
     @Override
     public Token matchPattern(String token) throws FailedToMatchPatternException {

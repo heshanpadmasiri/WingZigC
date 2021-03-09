@@ -22,7 +22,6 @@ class RecursiveDescentParserTest {
     @BeforeEach
     void setUp() {
         symbolTable = mock(SymbolTable.class);
-        when(symbolTable.getNextKey()).thenReturn(0);
     }
 
     @Test
@@ -40,7 +39,7 @@ class RecursiveDescentParserTest {
             InputScanner scanner = null;
             try {
                 scanner = new InputScanner(file.toPath());
-                RecursiveDescentParser parser = new RecursiveDescentParser(symbolTable, scanner);
+                RecursiveDescentParser parser = new RecursiveDescentParser(scanner);
                 parser.parse();
             } catch (FileNotFoundException | FailedToMatchPatternException e) {
                 assertNull(e);

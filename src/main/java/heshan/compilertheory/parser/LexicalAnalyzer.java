@@ -10,13 +10,13 @@ public class LexicalAnalyzer extends AbstractLexicalAnalyzer {
   final Token END = new Token(TokenType.FILE_END, -1, "");
   Tokenizer tokenizer;
 
-  public LexicalAnalyzer(SymbolTable symbolTable, InputScanner inputScanner)
+  public LexicalAnalyzer(InputScanner inputScanner)
       throws FailedToMatchPatternException {
-    super(symbolTable);
-    keyWordAnalyzer = new KeyWordAnalyzer(symbolTable);
-    operationAnalyzer = new OperationAnalyzer(symbolTable);
-    punctuationAnalyzer = new PunctuationAnalyzer(symbolTable);
-    identifierAnalyzer = new IdentifierAnalyzer(symbolTable);
+    super();
+    keyWordAnalyzer = new KeyWordAnalyzer();
+    operationAnalyzer = new OperationAnalyzer();
+    punctuationAnalyzer = new PunctuationAnalyzer();
+    identifierAnalyzer = new IdentifierAnalyzer();
     this.tokenizer = new Tokenizer(inputScanner);
     firstMove();
   }

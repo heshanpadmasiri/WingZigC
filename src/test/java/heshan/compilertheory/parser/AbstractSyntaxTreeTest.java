@@ -23,13 +23,12 @@ class AbstractSyntaxTreeTest {
     @BeforeEach
     void setUp() {
         symbolTable = mock(SymbolTable.class);
-        when(symbolTable.getNextKey()).thenReturn(0);
     }
 
     void printTree(Path program_path) {
         try {
             InputScanner scanner = new InputScanner(program_path);
-            RecursiveDescentParser parser = new RecursiveDescentParser(symbolTable, scanner);
+            RecursiveDescentParser parser = new RecursiveDescentParser(scanner);
             parser.parse();
             AbstractSyntaxTree ast = parser.getAbstractSyntaxTree();
             ast.printTree();
@@ -43,7 +42,7 @@ class AbstractSyntaxTreeTest {
         Path program_path = Paths.get("", "src", "test", "resources", "compile_test.test");
         try {
             InputScanner scanner = new InputScanner(program_path);
-            RecursiveDescentParser parser = new RecursiveDescentParser(symbolTable, scanner);
+            RecursiveDescentParser parser = new RecursiveDescentParser(scanner);
             parser.parse();
             AbstractSyntaxTree ast = parser.getAbstractSyntaxTree();
             ast.printTree();
@@ -67,7 +66,7 @@ class AbstractSyntaxTreeTest {
                 file -> {
                     try {
                         InputScanner scanner = new InputScanner(file.toPath());
-                        RecursiveDescentParser parser = new RecursiveDescentParser(symbolTable, scanner);
+                        RecursiveDescentParser parser = new RecursiveDescentParser(scanner);
                         parser.parse();
                         String ast_file_name = file.getName() + ".ast";
                         Path ast_file = assetsRoot.resolve(ast_file_name);

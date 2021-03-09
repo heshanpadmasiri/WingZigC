@@ -8,9 +8,6 @@ public class IdentifierAnalyzer extends AbstractLexicalAnalyzer {
   Pattern character = Pattern.compile("'.{0,1}'");
   Pattern string = Pattern.compile("\".*\"");
 
-  public IdentifierAnalyzer(SymbolTable symbolTable) {
-    super(symbolTable);
-  }
 
   @Override
   public Token matchPattern(String tokenValue) throws FailedToMatchPatternException {
@@ -26,8 +23,6 @@ public class IdentifierAnalyzer extends AbstractLexicalAnalyzer {
     } else {
       throw new FailedToMatchPatternException();
     }
-    int id = symbolTable.getNextKey();
-    symbolTable.upsert(id, null);
-    return new Token(type, id, tokenValue);
+    return new Token(type, 0, tokenValue);
   }
 }

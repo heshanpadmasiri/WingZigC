@@ -22,7 +22,6 @@ class LexicalAnalyzerTest {
   @BeforeEach
   void setUp() {
     symbolTable = mock(SymbolTable.class);
-    when(symbolTable.getNextKey()).thenReturn(0);
   }
 
   @Test
@@ -39,7 +38,7 @@ class LexicalAnalyzerTest {
           try {
             InputScanner scanner = new InputScanner(file.toPath());
             Tokenizer tokenizer = new Tokenizer(scanner);
-            LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(symbolTable, scanner);
+            LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(scanner);
             while (tokenizer.hasNext()) {
               String token = tokenizer.next();
               Token t = lexicalAnalyzer.matchPattern(token);
@@ -66,7 +65,7 @@ class LexicalAnalyzerTest {
           InputScanner scanner = null;
           try {
             scanner = new InputScanner(file.toPath());
-            LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(symbolTable, scanner);
+            LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(scanner);
             Token token = lexicalAnalyzer.getToken();
             while (token.getType() != TokenType.FILE_END) {
               assertNotNull(token.getType());
@@ -92,7 +91,7 @@ class LexicalAnalyzerTest {
           InputScanner scanner = null;
           try {
             scanner = new InputScanner(file.toPath());
-            LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(symbolTable, scanner);
+            LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(scanner);
             Token next = lexicalAnalyzer.peekNextToken();
             Token token = lexicalAnalyzer.getToken();
             assertEquals(token, next);
