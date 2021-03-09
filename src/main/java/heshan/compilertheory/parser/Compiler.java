@@ -1,5 +1,7 @@
 package heshan.compilertheory.parser;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
@@ -223,8 +225,12 @@ public class Compiler {
         return program;
     }
 
-    public void toFile(Path outputPath) {
-
+    public void toFile(Path outputPath) throws IOException {
+        FileWriter writer = new FileWriter(outputPath.toString());
+        for(String line: program) {
+            writer.write(line + System.lineSeparator());
+        }
+        writer.close();
     }
 
 

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -54,6 +55,16 @@ class CompilerTest {
 
     @Test
     void toFile() {
+        Path outputPath = Paths.get("", "output.o");
+        try {
+            compiler.toFile(outputPath);
+            List<String> output = readFile(outputPath.toFile());
+            List<String> expectedOutput = readFile(Paths.get("", "src", "test", "resources", "compile_test_expected.o").toFile());
+            assertEquals(expectedOutput, output);
+            outputPath.toFile().delete();
+        } catch (IOException e) {
+            assertNull(e);
+        }
     }
 
 }
