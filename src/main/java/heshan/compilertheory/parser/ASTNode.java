@@ -50,4 +50,8 @@ public class ASTNode {
   public String toString() {
     return String.format("%s(%d)", value, children.size());
   }
+
+  public String getValue() {
+    return value;
+  }
 }
