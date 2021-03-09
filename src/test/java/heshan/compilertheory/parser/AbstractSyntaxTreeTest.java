@@ -39,6 +39,21 @@ class AbstractSyntaxTreeTest {
   }
 
   @Test
+  void canBuildASTForCompileTest(){
+    Path program_path = Paths.get("", "src" , "test" , "resources", "compile_test.test");
+    try {
+      InputScanner scanner = new InputScanner(program_path);
+      RecursiveDescentParser parser = new RecursiveDescentParser(symbolTable, scanner);
+      parser.parse();
+      AbstractSyntaxTree ast = parser.getAbstractSyntaxTree();
+      ast.printTree();
+    } catch (FileNotFoundException | FailedToMatchPatternException e) {
+      assertNull(e);
+    }
+
+  }
+
+  @Test
   void writeToFile() {
     Path assetsRoot = Paths.get("", "src", "test", "resources");
     Stream<File> inputFiles =

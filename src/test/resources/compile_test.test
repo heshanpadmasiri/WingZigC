@@ -1,0 +1,12 @@
+program compile_test:
+
+const A = 5, B=3;
+var c:integer;
+
+begin
+
+    c :=A*B+5;
+    c := c/3;
+
+end
+compile_test.
