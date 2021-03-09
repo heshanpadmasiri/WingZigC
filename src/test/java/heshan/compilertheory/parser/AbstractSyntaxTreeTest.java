@@ -62,6 +62,7 @@ class AbstractSyntaxTreeTest {
                                 filename ->
                                         !(filename.toString().contains(".tree")
                                                 || filename.toString().contains(".ast")
+                                                || filename.toString().contains(".o")
                                                 || filename.toString().contains(".test")));
         inputFiles.forEach(
                 file -> {
@@ -94,6 +95,7 @@ class AbstractSyntaxTreeTest {
                                 filename ->
                                         !(filename.toString().contains(".tree")
                                                 || filename.toString().contains(".ast")
+                                                || filename.toString().contains(".o")
                                                 || filename.toString().contains(".test")));
         inputFiles.forEach(
                 file -> {

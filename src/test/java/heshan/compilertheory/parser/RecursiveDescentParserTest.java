@@ -33,6 +33,7 @@ class RecursiveDescentParserTest {
                                 filename ->
                                         !(filename.toString().contains(".tree")
                                                 || filename.toString().contains(".ast")
+                                                || filename.toString().contains(".o")
                                                 || filename.toString().contains(".test")));
         inputFiles.forEach(file -> {
             System.out.println(file.toString());
