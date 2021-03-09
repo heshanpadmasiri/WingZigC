@@ -6,9 +6,11 @@ import java.util.List;
 public class Compiler {
     private List<String> program;
     private AbstractSyntaxTree ast;
+    private SymbolTable symbolTable;
 
     public Compiler(AbstractSyntaxTree ast) {
         this.ast = ast;
+        symbolTable = new SymbolTable();
         compile();
     }
 
