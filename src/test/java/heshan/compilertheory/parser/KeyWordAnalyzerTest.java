@@ -22,7 +22,7 @@ class KeyWordAnalyzerTest {
 
     @Test
     void matchPattern() {
-        KeyWordAnalyzer keyWordAnalyzer = new KeyWordAnalyzer(symbolTable);
+        KeyWordAnalyzer keyWordAnalyzer = new KeyWordAnalyzer();
         Map<String, TokenType> tokenToType = Stream.of(new Object[][] {
                 {"program", TokenType.PROGRAM},
                 {"var", TokenType.VAR},

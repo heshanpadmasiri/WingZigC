@@ -1,16 +1,14 @@
 package heshan.compilertheory.parser;
 
 public class RecursiveDescentParser {
-  private final SymbolTable symbolTable;
   private LexicalAnalyzer lexicalAnalyzer;
   private AbstractSyntaxTree abstractSyntaxTree;
   private Token current;
   private Token next;
 
-  public RecursiveDescentParser(SymbolTable symbolTable, InputScanner inputScanner)
+  public RecursiveDescentParser(InputScanner inputScanner)
       throws FailedToMatchPatternException {
-    this.symbolTable = symbolTable;
-    this.lexicalAnalyzer = new LexicalAnalyzer(symbolTable, inputScanner);
+    this.lexicalAnalyzer = new LexicalAnalyzer(inputScanner);
   }
 
   private void moveForward() {

@@ -1,9 +1,6 @@
 package heshan.compilertheory.parser;
 
 public class PunctuationAnalyzer extends AbstractLexicalAnalyzer{
-    public PunctuationAnalyzer(SymbolTable symbolTable) {
-        super(symbolTable);
-    }
 
     @Override
     public Token matchPattern(String tokenValue) throws FailedToMatchPatternException {

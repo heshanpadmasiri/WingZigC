@@ -1,9 +1,6 @@
 package heshan.compilertheory.parser;
 
 public class OperationAnalyzer extends AbstractLexicalAnalyzer {
-    public OperationAnalyzer(SymbolTable symbolTable) {
-        super(symbolTable);
-    }
 
     @Override
     public Token matchPattern(String token_value) throws FailedToMatchPatternException {

@@ -2,36 +2,29 @@ package heshan.compilertheory.parser;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class SymbolTable {
-    Map<Integer, Integer> table = new TreeMap<>();
+    private Map<String, Integer> locationMap = new HashMap<>();
+    private Map<String, DataType> typeMap = new HashMap<>();
 
-    void insert(int key, Integer value) throws SymbolAlreadyInException {
-        if(table.containsKey(key)){
-            throw new SymbolAlreadyInException();
-        } else {
-            table.put(key, value);
+    public void addSymbol(String name, DataType type, int stackLocation){
+        if (locationMap.containsKey(name)){
+            throw new RuntimeException("Duplicate declaration of " + name);
         }
+        assert stackLocation >= 0;
+        locationMap.put(name, stackLocation);
+        typeMap.put(name, type);
     }
 
-    void upsert(int key, Integer value){
-        if(table.containsKey(key)){
-            table.replace(key, value);
-        } else {
-            table.put(key, value);
-        }
+    public int getLocation(String name){
+        return locationMap.get(name);
     }
 
-    boolean contains(int key){
-        return table.containsKey(key);
+    public DataType getType(String name){
+        return typeMap.get(name);
     }
 
-    int getValue(int key){
-        return table.get(key);
-    }
-
-    int getNextKey(){
-        return table.size();
+    public boolean contains(String name){
+        return locationMap.containsKey(name);
     }
 }

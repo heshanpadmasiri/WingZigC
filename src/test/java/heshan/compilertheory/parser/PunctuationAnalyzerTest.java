@@ -21,7 +21,7 @@ class PunctuationAnalyzerTest {
 
     @Test
     void matchPattern() {
-        PunctuationAnalyzer punctuationAnalyzer = new PunctuationAnalyzer(symbolTable);
+        PunctuationAnalyzer punctuationAnalyzer = new PunctuationAnalyzer();
         Map<String, TokenType> tokenToType = Stream.of(new Object[][] {
                 {"eof", TokenType.EOF},
                 {":", TokenType.COL},

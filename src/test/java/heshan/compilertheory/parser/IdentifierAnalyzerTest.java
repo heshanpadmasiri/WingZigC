@@ -17,12 +17,11 @@ class IdentifierAnalyzerTest {
     @BeforeEach
     void setUp() {
         symbolTable = mock(SymbolTable.class);
-        when(symbolTable.getNextKey()).thenReturn(0);
     }
 
     @Test
     void matchPattern() {
-        IdentifierAnalyzer identifierAnalyzer = new IdentifierAnalyzer(symbolTable);
+        IdentifierAnalyzer identifierAnalyzer = new IdentifierAnalyzer();
         Map<String, Boolean> idSuccess = Stream.of(new Object[][] {
                 {"h", true},
                 {"H", true},

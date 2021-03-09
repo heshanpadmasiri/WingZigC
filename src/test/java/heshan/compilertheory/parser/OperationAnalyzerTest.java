@@ -21,7 +21,7 @@ class OperationAnalyzerTest {
 
     @Test
     void matchPattern() {
-        OperationAnalyzer operationAnalyzer = new OperationAnalyzer(symbolTable);
+        OperationAnalyzer operationAnalyzer = new OperationAnalyzer();
         Map<String, TokenType> tokenToType = Stream.of(new Object[][] {
                 {":=:", TokenType.SWAP},
                 {":=", TokenType.ASSIGN},
