@@ -17,32 +17,34 @@ import static org.mockito.Mockito.when;
 
 class RecursiveDescentParserTest {
 
-  SymbolTable symbolTable;
+    SymbolTable symbolTable;
 
-  @BeforeEach
-  void setUp() {
-    symbolTable = mock(SymbolTable.class);
-    when(symbolTable.getNextKey()).thenReturn(0);
-  }
+    @BeforeEach
+    void setUp() {
+        symbolTable = mock(SymbolTable.class);
+        when(symbolTable.getNextKey()).thenReturn(0);
+    }
 
-  @Test
-  void parse() {
-    Path assetsRoot = Paths.get("", "src", "test", "resources");
-    Stream<File> inputFiles =
-        Arrays.stream(Objects.requireNonNull(assetsRoot.toFile().listFiles()))
-            .filter(
-                filename ->
-                    !(filename.toString().contains(".tree")
-                        || filename.toString().contains(".test")));
-    inputFiles.forEach(file -> {
-      InputScanner scanner = null;
-      try {
-        scanner = new InputScanner(file.toPath());
-        RecursiveDescentParser parser = new RecursiveDescentParser(symbolTable, scanner);
-        parser.parse();
-      } catch (FileNotFoundException | FailedToMatchPatternException e) {
-        assertNull(e);
-      }
-    });
-  }
+    @Test
+    void parse() {
+        Path assetsRoot = Paths.get("", "src", "test", "resources");
+        Stream<File> inputFiles =
+                Arrays.stream(Objects.requireNonNull(assetsRoot.toFile().listFiles()))
+                        .filter(
+                                filename ->
+                                        !(filename.toString().contains(".tree")
+                                                || filename.toString().contains(".ast")
+                                                || filename.toString().contains(".test")));
+        inputFiles.forEach(file -> {
+            System.out.println(file.toString());
+            InputScanner scanner = null;
+            try {
+                scanner = new InputScanner(file.toPath());
+                RecursiveDescentParser parser = new RecursiveDescentParser(symbolTable, scanner);
+                parser.parse();
+            } catch (FileNotFoundException | FailedToMatchPatternException e) {
+                assertNull(e);
+            }
+        });
+    }
 }
